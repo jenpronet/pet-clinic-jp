@@ -108,7 +108,6 @@ jobs:
           args: >
             --failOnCVSS 4
             --enableRetired
-            --suppression suppression.xml
         env:
           JAVA_HOME: /opt/jdk
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
