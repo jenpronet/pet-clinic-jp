@@ -102,23 +102,23 @@ jobs:
       - name: Compilar proyecto (generar JARs de dependencias)
         run: mvn -B package -DskipTests
 
-      - name: SCA – Trivy filesystem scan
-        uses: aquasecurity/trivy-action@master
+      - name: SCA – OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
         with:
-          scan-type: "fs"
-          scan-ref: "."
-          format: "table"
-          exit-code: "1"
-          ignore-unfixed: false
-          severity: "CRITICAL,HIGH,MEDIUM"
-          output: "trivy-sca-results.txt"
+          project: "spring-petclinic"
+          path: "."
+          format: "HTML"
+          out: "reports"
+          args: >
+            --failOnCVSS 4
+            --enableRetired
 
       - name: Publicar reporte SCA
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: sca-report
-          path: trivy-sca-results.txt
+          path: ${{github.workspace}}/reports
 
   # ─────────────────────────────────────────────────────────────────────────────
   # JOB 4: Docker Build – construye la imagen Docker
