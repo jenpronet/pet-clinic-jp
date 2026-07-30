@@ -99,15 +99,27 @@ jobs:
           distribution: "temurin"
           cache: maven
 
+      - name: Restaurar caché NVD (OWASP DC)
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: owasp-nvd-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            owasp-nvd-${{ runner.os }}-
+
       - name: Compilar proyecto (generar JARs de dependencias)
         run: mvn -B package -DskipTests
 
       - name: SCA – OWASP Dependency Check
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
           mvn -B org.owasp:dependency-check-maven:check \
             -DfailBuildOnCVSS=4 \
             -Dformat=HTML \
-            -DoutputDirectory=reports
+            -DoutputDirectory=reports \
+            -Dorg.owasp.dependencycheck.data.directory="${HOME}/.m2/repository/org/owasp/dependency-check-data" \
+            ${NVD_API_KEY:+-DnvdApiKey=${NVD_API_KEY}}
 
       - name: Publicar reporte SCA
         uses: actions/upload-artifact@v4
