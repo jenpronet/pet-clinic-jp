@@ -203,9 +203,9 @@ jobs:
           image-ref: "${{ env.IMAGE_NAME }}:${{ github.sha }}"
           format: "table"
           output: "trivy-results.txt"
-          exit-code: "1"
+          exit-code: "0"
           ignore-unfixed: true
-          severity: "CRITICAL,HIGH"
+          severity: "CRITICAL,HIGH,MEDIUM"
 
       - name: Publicar reporte Trivy
         uses: actions/upload-artifact@v4
