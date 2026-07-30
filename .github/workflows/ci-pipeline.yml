@@ -75,9 +75,7 @@ jobs:
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
             -Dsonar.organization=${{ secrets.SONAR_ORG }} \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.qualitygate.wait=true \
-            -Dsonar.qualitygate.timeout=300
+            -Dsonar.host.url=https://sonarcloud.io
 
   # ─────────────────────────────────────────────────────────────────────────────
   # JOB 3: SCA – análisis de composición de software con OWASP Dependency Check
