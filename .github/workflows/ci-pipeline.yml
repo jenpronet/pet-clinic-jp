@@ -103,24 +103,18 @@ jobs:
         run: mvn -B package -DskipTests
 
       - name: SCA – OWASP Dependency Check
-        uses: dependency-check/Dependency-Check_Action@main
-        env:
-          JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
-        with:
-          project: "spring-petclinic"
-          path: "."
-          format: "HTML"
-          out: "reports"
-          args: >
-            --failOnCVSS 4
-            --enableRetired
+        run: |
+          mvn -B org.owasp:dependency-check-maven:check \
+            -DfailBuildOnCVSS=4 \
+            -Dformat=HTML \
+            -DoutputDirectory=reports
 
       - name: Publicar reporte SCA
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: sca-report
-          path: ${{github.workspace}}/reports
+          path: reports/
 
   # ─────────────────────────────────────────────────────────────────────────────
   # JOB 4: Docker Build – construye la imagen Docker
