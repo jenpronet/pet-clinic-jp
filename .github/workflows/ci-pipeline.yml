@@ -32,8 +32,7 @@ jobs:
 
       - name: Compilar y empaquetar (sin tests)
         run: |
-          chmod +x mvnw
-          ./mvnw -B package -DskipTests
+          mvn -B package -DskipTests
 
       - name: Publicar JAR como artefacto
         uses: actions/upload-artifact@v4
@@ -73,8 +72,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          chmod +x mvnw
-          ./mvnw -B verify sonar:sonar \
+          mvn -B verify sonar:sonar \
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
             -Dsonar.organization=${{ secrets.SONAR_ORG }} \
             -Dsonar.host.url=https://sonarcloud.io \
@@ -145,8 +143,7 @@ jobs:
 
       - name: Compilar JAR
         run: |
-          chmod +x mvnw
-          ./mvnw -B package -DskipTests
+          mvn -B package -DskipTests
 
       - name: Construir imagen Docker
         run: docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} .
